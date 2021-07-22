@@ -87,8 +87,8 @@ wss.on('connection', function connection(ws, req) {
       }
       data['connect_pressed'] = connectPressed;
       message = JSON.stringify(data);
-      if (clients[userID] != undefined) {
-        clients[userID].send(message);
+      if (clients[from] != undefined) {
+        clients[from].send(message);
       }
     } else {
       console.log("SENDING MESSAGE TO "+to+", content: "+content);
