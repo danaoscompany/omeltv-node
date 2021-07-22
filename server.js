@@ -74,6 +74,10 @@ wss.on('connection', function connection(ws, req) {
       fillRoom(userID1, userID2);
     } else if (messageType == "clear_room") {
       let userID = parseInt(data['user_id']);
+      if (clients[userID] != undefined && clients[userID] != null && clients[userID]['connect_pressed'] != undefined
+      	&& clients[userID]['connect_pressed'] != null) {
+      	clients[userID]['connect_pressed'] = 0;
+      }
       clearRoom(userID);
     } else if (messageType == "connect") {
       let userID = data['user_id'];
