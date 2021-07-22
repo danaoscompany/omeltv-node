@@ -85,13 +85,13 @@ wss.on('connection', function connection(ws, req) {
       	&& clients[userID]['connect_pressed'] != null) {
         connectPressed = parseInt(clients[userID]['connect_pressed']);
       }
-      data['message_type'] = "is_connect_pressed";
+      data = {};
+      data['message_type'] = "is_connect_pressed_response";
       data['connect_pressed'] = connectPressed;
       data['clients'] = clients;
       data['test'] = "value";
-      message = JSON.stringify(data);
       if (clients[from] != undefined) {
-        clients[from].send(message);
+        clients[from].send(JSON.stringify(data));
       }
     } else {
       console.log("SENDING MESSAGE TO "+to+", content: "+content);
