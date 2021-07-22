@@ -75,6 +75,21 @@ wss.on('connection', function connection(ws, req) {
     } else if (messageType == "clear_room") {
       let userID = parseInt(data['user_id']);
       clearRoom(userID);
+    } else if (messageType == "connect") {
+      let userID = parseInt(data['user_id']);
+      clients[userID]['connect_pressed'] = 1;
+    } else if (messageType == "is_connect_pressed") {
+      let userID = data['user_id'];
+      let connectPressed = 0;
+      if (clients[userID] != undefined && clients[userID] != null && clients[userID]['connect_pressed'] != undefined
+      	&& clients[userID]['connect_pressed'] != null) {
+        connectPressed = parseInt(clients[userID]['connect_pressed']);
+      }
+      data['connect_pressed'] = connectPressed;
+      message = JSON.stringify(data);
+      if (clients[userID] != undefined) {
+        clients[userID].send(message);
+      }
     } else {
       console.log("SENDING MESSAGE TO "+to+", content: "+content);
       data['type'] = 'message';
