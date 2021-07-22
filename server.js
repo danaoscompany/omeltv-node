@@ -76,7 +76,7 @@ wss.on('connection', function connection(ws, req) {
       let userID = parseInt(data['user_id']);
       clearRoom(userID);
     } else if (messageType == "connect") {
-      let userID = parseInt(data['user_id']);
+      let userID = data['user_id'];
       clients[userID]['connect_pressed'] = 1;
     } else if (messageType == "is_connect_pressed") {
       let userID = data['user_id'];
