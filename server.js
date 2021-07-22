@@ -85,6 +85,7 @@ wss.on('connection', function connection(ws, req) {
       	&& clients[userID]['connect_pressed'] != null) {
         connectPressed = parseInt(clients[userID]['connect_pressed']);
       }
+      data['message_type'] = "is_connect_pressed";
       data['connect_pressed'] = connectPressed;
       message = JSON.stringify(data);
       if (clients[from] != undefined) {
