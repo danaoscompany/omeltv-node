@@ -88,6 +88,7 @@ wss.on('connection', function connection(ws, req) {
       data['message_type'] = "is_connect_pressed";
       data['connect_pressed'] = connectPressed;
       data['clients'] = clients;
+      data['test'] = "value";
       message = JSON.stringify(data);
       if (clients[from] != undefined) {
         clients[from].send(message);
