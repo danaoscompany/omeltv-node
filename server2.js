@@ -1,7 +1,6 @@
 const WebSocket = require('ws');
 const clients = {};
 const rooms = [];
-const activeUsers = [];
 
 const wss = new WebSocket.Server({ port: 8080 });
 
@@ -97,39 +96,6 @@ wss.on('connection', function connection(ws, req) {
       newData['test'] = "value";
       if (clients[from] != undefined) {
         clients[from].send(JSON.stringify(newData));
-      }
-    } else if (messageType == 'should_user_skip') {
-      let partnerUserID = parseInt(data['partner_user_id']);
-      let userActive = false;
-      for (let i=0; i<activeUsers.length; i++) {
-        if (activeUsers[i] == partnerUserID) {
-          userActive = true;
-          break;
-        }
-      }
-      if (userActive) {
-        if (clients[from] != undefined) {
-          data['should_user_skip'] = 1;
-          message = JSON.stringify(data);
-          clients[from].send(message);
-        }
-      } else {
-        if (clients[from] != undefined) {
-          data['should_user_skip'] = 0;
-          message = JSON.stringify(data);
-          clients[from].send(message);
-        }
-      }
-    } else if (messageType == 'set_user_active') {
-      let userID = parseInt(data['user_id']);
-      activeUsers.push(userID);
-    } else if (messageType == 'set_user_inactive') {
-      let userID = parseInt(data['user_id']);
-      for (let i=0; i<activeUsers.length; i++) {
-        if (activeUsers[i] == userID) {
-          activeUsers.splice(i, 1);
-          break;
-        }
       }
     } else {
       console.log("SENDING MESSAGE TO "+to+", content: "+content);
