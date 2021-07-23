@@ -141,6 +141,12 @@ wss.on('connection', function connection(ws, req) {
     } else if (messageType == 'set_user_active') {
       let userID = parseInt(data['user_id']);
       activeUsers.push(userID);
+    } else if (messageType == 'get_clients') {
+      let userID = parseInt(data['user_id']);
+      data['clients'] = clients;
+      if (clients[from] != undefined) {
+        clients[from].send(JSON.stringify(data));
+      }
     } else if (messageType == 'set_user_inactive') {
       let userID = parseInt(data['user_id']);
       let partnerUserID = parseInt(data['partner_user_id']);
