@@ -142,7 +142,7 @@ wss.on('connection', function connection(ws, req) {
       let userID = parseInt(data['user_id']);
       activeUsers.push(userID);
     } else if (messageType == 'set_user_inactive') {
-      let userID = parseInt(data['user_id']);{
+      let userID = parseInt(data['user_id']);
       let partnerUserID = parseInt(data['partner_user_id']);
       for (let i=0; i<activeUsers.length; i++) {
         if (activeUsers[i] == userID) {
