@@ -99,21 +99,39 @@ wss.on('connection', function connection(ws, req) {
         clients[from].send(JSON.stringify(newData));
       }
     } else if (messageType == 'should_user_skip') {
+      let userID = parseInt(data['user_id']);
       let partnerUserID = parseInt(data['partner_user_id']);
-      let userActive = false;
+      let myUserIDExists = false, partnerUserIDExists = false;
       for (let i=0; i<activeUsers.length; i++) {
-        if (activeUsers[i] == partnerUserID) {
-          userActive = true;
-          break;
+        if (activeUsers[i] == userID) {
+          myUserIDExists = true;
+        } else if (activeUsers[i] == partnerUserID) {
+          partnerUserIDExists = true;
         }
       }
-      if (userActive) {
+      if (!myUserIDExists && !partnerUserIDExists) {
+        activeUsers.push(userID);
+        activeUsers.push(partnerUserID);
+        if (clients[from] != undefined) {
+          data['should_user_skip'] = 0;
+          message = JSON.stringify(data);
+          clients[from].send(message);
+        }
+      } else if (myUserIDExists && !partnerUserIDExists) {
+        // Skip this user
         if (clients[from] != undefined) {
           data['should_user_skip'] = 1;
           message = JSON.stringify(data);
           clients[from].send(message);
         }
-      } else {
+      } else if (!myUserIDExists && partnerUserIDExists) {
+        // Skip this user
+        if (clients[from] != undefined) {
+          data['should_user_skip'] = 1;
+          message = JSON.stringify(data);
+          clients[from].send(message);
+        }
+      } else if (myUserIDExists && partnerUserIDExists) {
         if (clients[from] != undefined) {
           data['should_user_skip'] = 0;
           message = JSON.stringify(data);
